@@ -7,7 +7,7 @@ from std_msgs.msg import String
 class WatchdogNode(Node):
 
     shouldTurn = True
-    shouldMove = True
+    shouldMove = False
 
     def __init__(self):
         super().__init__('watchdog')
@@ -34,8 +34,13 @@ class WatchdogNode(Node):
         self.publisher.publish(msg)
         
     def controller_callback(self, msg):
-        if (msg.data == "start"): self.shouldTurn = False
-        elif (msg.data == "stop"): self.shouldMove = False
+        if (msg.data == "start"): 
+            self.shouldMove = True
+
+        elif (msg.data == "stop"):
+            self.shouldTurn = False
+            self.shouldMove = False
+        
         self.get_logger().warn(f'The controller says I should {msg.data} the turtle ...')
 
 
