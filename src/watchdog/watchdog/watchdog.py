@@ -25,7 +25,7 @@ class WatchdogNode(Node):
         if (self.shouldTurn == False): 
             msg.angular.z = 0.0
 
-            # Don't move if you shouldn't (Moving is x and y-Axis)
+        # Don't move if you shouldn't (Moving is x and y-Axis)
         if (self.shouldMove == False): 
             msg.linear._x = 0.0
             msg.linear._y = 0.0
