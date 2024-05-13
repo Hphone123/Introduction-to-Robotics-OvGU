@@ -15,15 +15,21 @@ class VelocityController(DrivingSwarmNode):
         self.create_subscription(LaserScan, 'scan', self.laser_cb, rclpy.qos.qos_profile_sensor_data)
         self.create_timer(0.1, self.timer_cb)
         self.setup_command_interface()
+        self.logger = self.get_logger()
+        self.started = True
+        self.logger.info(f"Initialized Robot {self.name}!")
         
     def timer_cb(self):
+        # Wait 'till ready
         if not self.started:
             return
+        
         msg = Twist()
-        x = self.forward_distance - 0.3
-        x = x if x < 0.1 else 0.1
-        x = x if x >= 0 else 0.0
-        msg.linear.x = x
+        msg.linear.x = 1.0
+
+        if self.forward_distance < 1: msg.angular.z = 2.0
+
+        # Go
         self.publisher.publish(msg)
     
     def laser_cb(self, msg):
