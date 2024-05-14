@@ -53,6 +53,13 @@ Run your behaviour and note the score after 240s (sim-time)
 - `ros2 launch reactive_behaviour robot.launch.py`
 - `ros2 launch reactive_behaviour swarmlab.launch.py`
 
+### Solution
+
+- Scan forward, a little right and a little left
+- Stop completely if wall is scanned .3 units in fronts
+- Turn until no wall is scanned
+- Go
+
 ## Assignment 3: State Estimation
 
 In this assignment your task is to estimate the state of the robot. To achieve this goal, you will follow a two step process:

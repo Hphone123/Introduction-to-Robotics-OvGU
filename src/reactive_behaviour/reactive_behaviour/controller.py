@@ -1,5 +1,6 @@
 import rclpy
 from rclpy.node import Node
+import random
 
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
@@ -15,19 +16,43 @@ class VelocityController(DrivingSwarmNode):
         self.create_subscription(LaserScan, 'scan', self.laser_cb, rclpy.qos.qos_profile_sensor_data)
         self.create_timer(0.1, self.timer_cb)
         self.setup_command_interface()
+        self.logger = self.get_logger()
+        # self.started = True
+        self.go = True
+        self.logger.info(f"Initialized Robot {self.name}!")
         
     def timer_cb(self):
+        # Wait 'till ready
         if not self.started:
             return
+        
         msg = Twist()
-        x = self.forward_distance - 0.3
-        x = x if x < 0.1 else 0.1
-        x = x if x >= 0 else 0.0
-        msg.linear.x = x
+        msg.linear.x = 0.2
+        
+        if (self.forward_distance < 0.3 or self.rf_distance < 0.3 or self.lf_distance < 0.3) and (self.go):
+            self.go = False
+            if self.lf_distance < self.rf_distance:
+                self.turn = 'left'
+            else:
+                self.turn = 'right'
+        if self.forward_distance > 0.3 and self.rf_distance > 0.3 and self.lf_distance > 0.3:
+            self.go = True
+        
+        if not self.go:    
+            msg.linear.x = 0.0
+            if self.turn == 'right':
+                msg.angular.z = -0.35
+            else:
+                msg.angular.z = 0.35
+
+        # Go
         self.publisher.publish(msg)
     
     def laser_cb(self, msg):
+        self.started = True
         self.forward_distance = msg.ranges[0]
+        self.rf_distance = msg.ranges[35]
+        self.lf_distance = msg.ranges[len(msg.ranges) - 35]
 
 
 
