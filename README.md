@@ -34,6 +34,9 @@ Start the package for assignment one in the following way:
     - Modify the behaviour of the watchdog, so the turtle is only able to turn before the start command is sent and stopped completly after the stop command is sent
     - In order to create the desired behaviour you have to set certain components of the 'cmd_vel' topic to zero
 
+### Solution
+- Very Simple, look into watchdog.py file
+
 ## Assignment 2: Reactive Behaviour
 
 In this assignment we want to program a reactive behaviour, that controls the robot by directly computing actuator commands from the sensor input. The sensor input we use is the laser scanner of the robot, which publishes to the `scan` topic. The velocity of the robot is controlled via the `cmd_vel` topic.
@@ -43,6 +46,7 @@ In this assignment we want to program a reactive behaviour, that controls the ro
 - You can modify the code within the file `controller.py` to change the behaviour of the robot
 - Explore as much of the reachable area as possible (think of a cleaning robot)
 - Don't crash ;)
+
 
 ### Benchmark
 Run your behaviour and note the score after 240s (sim-time)
