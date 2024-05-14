@@ -27,23 +27,23 @@ class VelocityController(DrivingSwarmNode):
             return
         
         msg = Twist()
-        msg.linear.x = 0.1
+        msg.linear.x = 0.2
         
-        if (self.forward_distance < 0.25 or self.rf_distance < 0.25 or self.lf_distance < 0.25) and (self.go):
+        if (self.forward_distance < 0.3 or self.rf_distance < 0.3 or self.lf_distance < 0.3) and (self.go):
             self.go = False
             if self.lf_distance < self.rf_distance:
                 self.turn = 'left'
             else:
                 self.turn = 'right'
-        if self.forward_distance > 0.5 and self.rf_distance > 0.5 and self.lf_distance > 0.5:
+        if self.forward_distance > 0.3 and self.rf_distance > 0.3 and self.lf_distance > 0.3:
             self.go = True
         
         if not self.go:    
             msg.linear.x = 0.0
             if self.turn == 'right':
-                msg.angular.z = -0.5
+                msg.angular.z = -0.35
             else:
-                msg.angular.z = 0.5
+                msg.angular.z = 0.35
 
         # Go
         self.publisher.publish(msg)
