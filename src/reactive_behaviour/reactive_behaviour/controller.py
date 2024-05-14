@@ -18,6 +18,7 @@ class VelocityController(DrivingSwarmNode):
         self.setup_command_interface()
         self.logger = self.get_logger()
         # self.started = True
+        self.go = True
         self.logger.info(f"Initialized Robot {self.name}!")
         
     def timer_cb(self):
@@ -26,25 +27,32 @@ class VelocityController(DrivingSwarmNode):
             return
         
         msg = Twist()
-        msg.linear.x = 0.3
+        msg.linear.x = 0.1
         
-        if self.forward_distance < 0.3 or self.rf_distance < 0.3 or self.lf_distance < 0.3:
-            msg.linear.x = 0.0
+        if (self.forward_distance < 0.25 or self.rf_distance < 0.25 or self.lf_distance < 0.25) and (self.go):
+            self.go = False
             if self.lf_distance < self.rf_distance:
-                msg.angular.z = 3.0
+                self.turn = 'left'
             else:
-                msg.angular.z = -3.0
-                
-
+                self.turn = 'right'
+        if self.forward_distance > 0.5 and self.rf_distance > 0.5 and self.lf_distance > 0.5:
+            self.go = True
+        
+        if not self.go:    
+            msg.linear.x = 0.0
+            if self.turn == 'right':
+                msg.angular.z = -0.5
+            else:
+                msg.angular.z = 0.5
 
         # Go
         self.publisher.publish(msg)
     
     def laser_cb(self, msg):
         self.started = True
-        self.rf_distance = msg.ranges[5]
-        self.lf_distance = msg.ranges[355]
         self.forward_distance = msg.ranges[0]
+        self.rf_distance = msg.ranges[35]
+        self.lf_distance = msg.ranges[len(msg.ranges) - 35]
 
 
 
