@@ -37,6 +37,10 @@ class LocatorNode(Node):
             return 0.0, 0.0, 0.0
         
         # YOUR CODE GOES HERE:
+        
+        #* Testing that this bullshit is Online
+        self.get_logger().info("AmogusPenis!!")
+        
         x = np.mean([r.range for r in self.anchor_ranges]) - 0.5
         return x, 0.0, 0.0
 
